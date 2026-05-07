@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6c800" />
+    <title>AutoBoard Bengaluru</title>
+    <link rel="preconnect" href="https://www.gstatic.com" />
+    <link rel="stylesheet" href="/passenger.css?v=photo-ui-no-how" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/stand/majestic" aria-label="AutoBoard home">
+          <span class="brand-mark" aria-hidden="true">
+            <span class="mini-auto-roof"></span>
+            <span class="mini-auto-window"></span>
+            <span class="mini-auto-wheel left"></span>
+            <span class="mini-auto-wheel right"></span>
+          </span>
+          <span>
+            <strong>AutoBoard</strong>
+            <small>Live shared auto routes</small>
+          </span>
+        </a>
+        <span class="status-pill" id="connectionStatus">Connecting</span>
+      </header>
+
+      <section class="destination-search" aria-label="Choose destination from this stand">
+        <div class="search-box">
+          <input id="destinationSearch" type="search" placeholder="BTM Layout" autocomplete="off" aria-controls="destinationSuggestions" />
+          <button id="voiceSearchButton" class="voice-button" type="button" aria-label="Search route by voice"></button>
+        </div>
+        <div class="destination-suggestions" id="destinationSuggestions" role="listbox"></div>
+        <p class="voice-hint" id="destinationHint">Search or say your destination</p>
+      </section>
+
+      <section class="stand-hero" aria-labelledby="standTitle">
+        <div class="hero-title-row">
+          <span class="pin-dot" aria-hidden="true"></span>
+          <h1 id="standTitle">Loading stand...</h1>
+        </div>
+        <p id="standSubtitle">Find live shared autos near you</p>
+        <div class="live-summary" aria-label="Live stand summary">
+          <span><span class="live-dot" aria-hidden="true"></span>Live now</span>
+          <span id="heroReports">0 reports</span>
+          <span id="heroUpdated">Updated now</span>
+        </div>
+        <p class="pulse-line" id="heroPulse">Checking recent passenger reports...</p>
+      </section>
+
+      <section class="live-panel" aria-labelledby="routesTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Live routes now</p>
+            <h2 id="routesTitle">Popular right now</h2>
+          </div>
+          <span class="freshness" id="lastUpdated">Demo routes</span>
+        </div>
+        <div class="routes-list" id="routesList" aria-live="polite"></div>
+        <button class="view-all-button" id="viewAllRoutes" type="button">View all routes</button>
+      </section>
+
+      <section class="report-panel is-collapsed" aria-labelledby="reportTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Passenger update</p>
+            <h2 id="reportTitle">Just boarded? Help others</h2>
+          </div>
+          <button class="step-pill report-toggle" id="reportToggleButton" type="button">Open</button>
+        </div>
+        <span class="step-pill flow-pill" id="stepPill">Tap 1 of 2</span>
+
+        <div class="flow-step is-active" id="routeStep">
+          <p class="hint">Which route did you board?</p>
+          <div class="choice-grid" id="routeChoices"></div>
+          <p class="reporting-now" id="reportingNow">2 passengers reporting now</p>
+        </div>
+
+        <div class="flow-step" id="waitStep">
+          <div class="selected-route" id="selectedRouteLabel"></div>
+          <p class="hint">Roughly how long did you wait?</p>
+          <div class="choice-grid wait-grid" id="waitChoices"></div>
+          <button class="ghost-button" id="backToRoutes" type="button">Change route</button>
+        </div>
+
+        <div class="flow-step" id="successStep">
+          <div class="success-card">
+            <span class="success-icon">✓</span>
+            <h2 id="successTitle">Report added</h2>
+            <p id="successText">You helped other passengers decide faster.</p>
+            <button class="primary-button" id="reportAgain" type="button">Add another update</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-grid" aria-label="AutoBoard impact">
+        <article>
+          <span>Passengers helped now</span>
+          <strong id="passengersHelped">0</strong>
+        </article>
+        <article>
+          <span>Time saved today</span>
+          <strong id="timeSaved">0 min</strong>
+        </article>
+      </section>
+
+      <section class="pilot-strip" aria-label="Bengaluru pilot stands">
+        <div>
+          <p class="eyebrow">Bengaluru network</p>
+          <h2>Pilot stands</h2>
+        </div>
+        <div class="stand-dots" id="standDots"></div>
+      </section>
+
+      <section class="qr-copy" aria-label="QR board text">
+        <strong>AutoBoard</strong>
+        <span>Scan to see live autos · ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</span>
+      </section>
+      <p class="closing-line">Built for Bengaluru commuters ❤ Powered by passengers, not drivers.</p>
+    </main>
+
+    <div class="report-toast" id="reportToast" role="status" aria-live="polite">+1 new auto reported</div>
+    <button class="sticky-report-button" id="stickyReportButton" type="button">+ I just boarded an auto</button>
+    <script type="module" src="/passenger.js?v=photo-ui-no-how"></script>
+  </body>
+</html>

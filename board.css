@@ -1,0 +1,337 @@
+:root {
+  --yellow: #f6c800;
+  --yellow-deep: #e4b600;
+  --black: #141414;
+  --charcoal: #050505;
+  --green: #147a3d;
+  --white: #fffdf4;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(246, 200, 0, 0.16), transparent 28rem),
+    var(--charcoal);
+  color: var(--black);
+}
+
+.board-shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: clamp(10px, 1.8vw, 18px);
+}
+
+.board-sign {
+  width: min(calc(100vw - 28px), 1060px);
+  border: clamp(7px, 1vw, 10px) solid var(--yellow);
+  border-radius: clamp(24px, 3vw, 36px);
+  padding: clamp(14px, 2vw, 22px);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 28%),
+    radial-gradient(circle at 50% 44%, #ffe45c 0, var(--yellow) 45%, var(--yellow-deep) 100%);
+  box-shadow: 0 0 36px rgba(246, 200, 0, 0.34);
+  text-align: center;
+}
+
+.scan-copy,
+.poster-kicker,
+.stand-name,
+.stand-url {
+  margin: 0;
+}
+
+.sign-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(13px, 2vw, 24px);
+  border-radius: clamp(20px, 2.6vw, 30px);
+  padding: clamp(14px, 2.15vw, 25px);
+  background: var(--charcoal);
+  color: white;
+  overflow: hidden;
+}
+
+h1 {
+  margin: 0;
+  color: white;
+  font-size: clamp(2.9rem, 6.55vw, 5.45rem);
+  font-weight: 950;
+  line-height: 0.9;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.scan-copy {
+  max-width: 100%;
+  margin-top: 10px;
+  color: var(--yellow);
+  font-size: clamp(1.05rem, 2.3vw, 1.72rem);
+  font-weight: 850;
+  letter-spacing: 0;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.poster-kicker {
+  margin-top: clamp(11px, 1.5vw, 16px);
+  color: #1b1600;
+  font-size: clamp(1.18rem, 2.1vw, 1.72rem);
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.auto-icon {
+  position: relative;
+  display: grid;
+  width: clamp(82px, 10.5vw, 124px);
+  aspect-ratio: 1;
+  place-items: center;
+  border: clamp(6px, 0.9vw, 8px) solid var(--yellow);
+  border-radius: 999px;
+}
+
+.auto-roof {
+  position: absolute;
+  top: 28%;
+  width: 47%;
+  height: 52%;
+  border-radius: 8px 8px 5px 5px;
+  background: var(--yellow);
+}
+
+.auto-window {
+  position: absolute;
+  top: 38%;
+  width: 34%;
+  height: 18%;
+  border-radius: 2px;
+  background: var(--charcoal);
+}
+
+.auto-wheel {
+  position: absolute;
+  bottom: 24%;
+  width: 10%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--charcoal);
+}
+
+.auto-wheel.left {
+  left: 36%;
+}
+
+.auto-wheel.right {
+  right: 36%;
+}
+
+.qr-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 1fr) minmax(300px, 400px) minmax(130px, 1fr);
+  align-items: center;
+  gap: clamp(15px, 2.65vw, 34px);
+  padding: clamp(18px, 2.4vw, 28px) clamp(24px, 4vw, 52px) clamp(11px, 1.6vw, 18px);
+}
+
+.qr-box {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border: 4px solid white;
+  border-radius: 18px;
+  padding: clamp(12px, 1.7vw, 18px);
+  background: white;
+  box-shadow: 0 14px 34px rgba(20, 20, 20, 0.2);
+}
+
+.qr-box img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.side-cue {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  color: var(--charcoal);
+  font-size: clamp(1.2rem, 2vw, 1.62rem);
+  font-weight: 950;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.cue-icon {
+  position: relative;
+  display: grid;
+  width: clamp(66px, 7.4vw, 88px);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--charcoal);
+  color: white;
+}
+
+.phone-icon::before {
+  content: "";
+  width: 28%;
+  height: 48%;
+  border: 5px solid white;
+  border-radius: 5px;
+}
+
+.phone-icon::after {
+  content: "";
+  position: absolute;
+  bottom: 25%;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: white;
+}
+
+.pin-icon::before {
+  content: "";
+  width: 32%;
+  height: 42%;
+  border: 5px solid white;
+  border-radius: 999px 999px 999px 0;
+  transform: rotate(-45deg);
+}
+
+.pin-icon::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: white;
+}
+
+.divider {
+  height: 4px;
+  width: min(84%, 820px);
+  margin: clamp(8px, 1.2vw, 13px) auto clamp(16px, 2vw, 24px);
+  border-radius: 999px;
+  background: var(--charcoal);
+}
+
+.stand-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: 950;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.stand-label {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 8px 13px;
+  background: var(--charcoal);
+  color: white;
+  font-size: clamp(0.78rem, 1.25vw, 0.95rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.stand-place {
+  color: var(--charcoal);
+  font-size: clamp(1.9rem, 3.65vw, 2.85rem);
+  font-weight: 950;
+  text-transform: none;
+}
+
+.stand-url {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  margin-top: clamp(12px, 1.7vw, 18px);
+  border-radius: 8px;
+  padding: 10px 16px;
+  background: var(--charcoal);
+  color: white;
+  font-size: clamp(0.98rem, 2vw, 1.42rem);
+  font-weight: 900;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+  .board-shell {
+    align-items: start;
+  }
+
+  .board-sign {
+    min-height: auto;
+  }
+
+  .sign-header {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding: 18px;
+  }
+
+  h1,
+  .scan-copy {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(2.45rem, 12.5vw, 3.65rem);
+  }
+
+  .qr-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-inline: 12px;
+  }
+
+  .side-cue {
+    grid-template-columns: auto auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stand-name {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+  }
+
+  .stand-place {
+    font-size: clamp(1.75rem, 9.5vw, 2.45rem);
+  }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .board-shell {
+    padding: 0;
+  }
+
+  .board-sign {
+    width: 100%;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+}

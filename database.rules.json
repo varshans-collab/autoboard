@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "stands": {
+      "$standId": {
+        "requests": {
+          ".read": true,
+          "$requestId": {
+            ".write": true,
+            ".validate": "newData.hasChildren(['standId', 'standName', 'routeId', 'origin', 'destination', 'waitTime', 'timestamp']) && newData.child('standId').isString() && newData.child('standId').val() === $standId && newData.child('standName').isString() && newData.child('routeId').isString() && newData.child('origin').isString() && newData.child('destination').isString() && newData.child('waitTime').isString() && newData.child('timestamp').isNumber()"
+          }
+        }
+      }
+    }
+  }
+}

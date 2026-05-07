@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#141414" />
+    <title>AutoBoard QR Board</title>
+    <link rel="stylesheet" href="/board.css?v=consistent-7-boards" />
+  </head>
+  <body>
+    <main class="board-shell">
+      <section class="board-sign">
+        <header class="sign-header">
+          <div class="auto-icon" aria-hidden="true">
+            <span class="auto-roof"></span>
+            <span class="auto-window"></span>
+            <span class="auto-wheel left"></span>
+            <span class="auto-wheel right"></span>
+          </div>
+          <div>
+            <h1>AutoBoard</h1>
+            <p class="scan-copy">Scan to see live autos · ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</p>
+          </div>
+        </header>
+
+        <p class="poster-kicker">Know before you board</p>
+
+        <div class="qr-row">
+          <div class="side-cue" aria-hidden="true">
+            <span class="cue-icon phone-icon"></span>
+            <strong>Scan<br />QR Code</strong>
+          </div>
+
+          <div class="qr-box">
+            <img id="qrImage" alt="QR code for AutoBoard stand page" />
+          </div>
+
+          <div class="side-cue" aria-hidden="true">
+            <span class="cue-icon pin-icon"></span>
+            <strong>See Live<br />Autos</strong>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="stand-name">
+          <span class="stand-label"><span aria-hidden="true">⌖</span> Location</span>
+          <span class="stand-place" id="standName">Pilot stand</span>
+        </p>
+        <p class="stand-url"><span aria-hidden="true">◎</span> <span id="standUrl">/stand/majestic</span></p>
+      </section>
+    </main>
+    <script type="module" src="/board.js?v=consistent-7-boards"></script>
+  </body>
+</html>
