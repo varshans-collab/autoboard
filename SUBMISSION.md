@@ -65,3 +65,20 @@ Each request stores:
 ```text
 standId, standName, routeId, origin, destination, waitTime, timestamp
 ```
+
+## AI Transparency
+
+AutoBoard includes a transparent AI-assisted estimate layer. It infers approximate wait time and ranked route suggestions from passenger-reported route activity in the last 30 minutes.
+
+Data used:
+
+- Current stand ID from the QR link
+- Passenger-submitted route
+- Passenger-submitted wait time
+- Timestamp of report
+
+Limits:
+
+- The estimate is not guaranteed.
+- It is a rule-based weighted average, not a hidden black-box model.
+- No login, identity, or personal location data is used.

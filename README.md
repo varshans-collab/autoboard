@@ -71,6 +71,9 @@ These pages generate printable QR boards for each stand:
 - Shows only recent route activity from the last 30 minutes
 - Two-tap passenger reporting flow
 - Destination search and voice input for route reporting
+- AI-assisted wait estimate with a transparency note
+- Ranked route suggestions based on recent stand activity
+- Judge-friendly "Load demo data" button
 - Seeded Bengaluru routes for pilot stands
 - Demo fallback state when there is no live data yet
 - Printable QR poster page for each stand
@@ -109,6 +112,35 @@ Passenger reports are stored at:
 ```text
 stands/{standId}/requests/{requestId}
 ```
+
+## AI Transparency
+
+AutoBoard uses a small transparent inference layer. It does not use hidden personal data and it does not guarantee that an auto will arrive.
+
+What the system infers:
+
+- Approximate wait time for active routes
+- Suggested route order while searching
+- Which routes appear active or trending
+
+What data it uses:
+
+- Passenger-submitted route reports
+- Passenger-submitted wait time ranges
+- Report timestamps from the last 30 minutes
+- Current stand ID from the QR link
+
+How it works:
+
+- Wait estimates are calculated from recent passenger wait-time reports using a simple weighted average.
+- More recent reports are weighted slightly higher.
+- Suggestions are ranked by recent report activity at the current stand.
+
+Limits:
+
+- Estimates are not guaranteed.
+- Reports are crowdsourced and may be noisy.
+- No passenger identity, login, or location tracking is used.
 
 Each report contains:
 

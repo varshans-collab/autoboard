@@ -130,7 +130,8 @@ button {
 
 .status-pill,
 .step-pill,
-.freshness {
+.freshness,
+.demo-data-button {
   flex: 0 0 auto;
   border: 0;
   border-radius: 8px;
@@ -139,6 +140,23 @@ button {
   color: white;
   font-size: 0.76rem;
   font-weight: 900;
+}
+
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.demo-data-button {
+  cursor: pointer;
+  background: var(--green);
+}
+
+.demo-data-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }
 
 .step-pill {
@@ -592,6 +610,43 @@ h2 {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+.ai-route-line {
+  margin: 4px 0 0;
+  color: var(--green);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.ai-panel {
+  margin: 10px;
+  border: 1px solid #d8cfaa;
+  border-radius: 8px;
+  padding: 10px;
+  background: #f7f1d7;
+  color: var(--charcoal);
+}
+
+.ai-panel strong {
+  display: block;
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.ai-panel p {
+  margin: 5px 0;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.ai-panel small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 750;
 }
 
 .wait-badge {

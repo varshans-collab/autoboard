@@ -1,5 +1,5 @@
 import { firebaseConfig } from "/firebase-config.js";
-import { boardStandIds, stands } from "/stands-data.js?v=photo-ui-no-how";
+import { boardStandIds, stands } from "/stands-data.js?v=ai-transparency";
 
 const RECENT_WINDOW_MS = 30 * 60 * 1000;
 const DEMO_IMPACT_FLOOR = {
@@ -34,6 +34,7 @@ const elements = {
   heroPulse: document.querySelector("#heroPulse"),
   routesTitle: document.querySelector("#routesTitle"),
   viewAllRoutes: document.querySelector("#viewAllRoutes"),
+  loadDemoData: document.querySelector("#loadDemoData"),
   stickyReportButton: document.querySelector("#stickyReportButton"),
   reportPanel: document.querySelector(".report-panel"),
   reportToggleButton: document.querySelector("#reportToggleButton"),
@@ -47,7 +48,8 @@ const elements = {
   destinationSearch: document.querySelector("#destinationSearch"),
   destinationSuggestions: document.querySelector("#destinationSuggestions"),
   voiceSearchButton: document.querySelector("#voiceSearchButton"),
-  destinationHint: document.querySelector("#destinationHint")
+  destinationHint: document.querySelector("#destinationHint"),
+  aiEstimate: document.querySelector("#aiEstimate")
 };
 
 let selectedRoute = null;
@@ -92,6 +94,7 @@ function boot() {
   elements.backToRoutes.addEventListener("click", () => showStep("route"));
   elements.reportAgain.addEventListener("click", resetFlow);
   elements.viewAllRoutes.addEventListener("click", toggleRoutesView);
+  elements.loadDemoData.addEventListener("click", loadDemoReports);
   elements.reportToggleButton.addEventListener("click", toggleReportPanel);
   elements.stickyReportButton.addEventListener("click", () => {
     expandReportPanel();
@@ -181,15 +184,19 @@ function setupVoiceSearch() {
 
 function renderDestinationSuggestions(query = "") {
   const normalizedQuery = normalizeSearch(query);
+  const routeScores = new Map(currentRoutes.map((route) => [route.routeId, route.reportCount]));
   const matches = stand.routes
     .filter((destination) => !normalizedQuery || normalizeSearch(destination).includes(normalizedQuery))
+    .sort((a, b) => {
+      return (routeScores.get(routeIdFor(b)) || 0) - (routeScores.get(routeIdFor(a)) || 0);
+    })
     .slice(0, normalizedQuery ? 8 : 5);
 
   elements.destinationSuggestions.innerHTML = matches
     .map((destination) => `
       <button type="button" role="option" data-destination="${escapeHtml(destination)}">
         <span>${escapeHtml(destination)}</span>
-        <small>Route</small>
+        <small>Suggested by recent activity</small>
       </button>
     `)
     .join("");
@@ -338,12 +345,14 @@ function buildBoardState(requests) {
       .filter((request) => request.routeId === routeId)
       .sort((a, b) => Number(b.timestamp) - Number(a.timestamp));
     const latest = routeReports[0];
+    const waitEstimate = estimateWaitMinutes(routeReports.map((request) => request.waitTime));
 
     return {
       routeId,
       origin: stand.name,
       destination,
       waitTime: latest?.waitTime || "No recent reports",
+      aiWaitEstimate: waitEstimate,
       reportCount: routeReports.length,
       lastReportAt: latest?.timestamp || null,
       pulseCount: routeReports.filter((request) => Number(request.timestamp) >= Date.now() - 2 * 60 * 1000).length,
@@ -371,6 +380,7 @@ function seedBoardState() {
       origin: stand.name,
       destination,
       waitTime: demo.waitTime,
+      aiWaitEstimate: estimateWaitMinutes([demo.waitTime]),
       reportCount: demo.reportCount,
       lastReportAt: demo.ageSeconds === null ? null : Date.now() - demo.ageSeconds * 1000,
       pulseCount: demo.pulseCount,
@@ -387,6 +397,7 @@ function renderRoutes(routes) {
     return Number(b.lastReportAt || 0) - Number(a.lastReportAt || 0);
   });
   renderHeroStats(currentRoutes);
+  renderAiSummary(currentRoutes);
   updateRouteChoiceStats();
 
   elements.routesList.innerHTML = "";
@@ -402,6 +413,9 @@ function renderRoutes(routes) {
     const lastSeen = route.lastReportAt ? `Updated ${formatAgo(Date.now() - Number(route.lastReportAt))}` : "No update in 30 min";
     const reportLabel = route.reportCount === 1 ? "1 report" : `${route.reportCount} reports`;
     const waitLabel = route.reportCount ? route.waitTime : "Quiet";
+    const aiLabel = route.reportCount && route.aiWaitEstimate
+      ? `AI ~${route.aiWaitEstimate} min based on ${route.reportCount} recent ${route.reportCount === 1 ? "report" : "reports"}`
+      : "No AI estimate yet";
     const activityLabel = route.pulseCount
       ? "⚡ Just reported"
       : route.reportCount >= 5
@@ -418,6 +432,7 @@ function renderRoutes(routes) {
             ${activityLabel ? `<span class="activity-tag">${escapeHtml(activityLabel)}</span>` : ""}
           </h3>
           <p class="route-meta-line">${route.reportCount ? "Live now &middot; " : "Quiet &middot; "}${escapeHtml(reportLabel)} &middot; ${escapeHtml(lastSeen)}</p>
+          <p class="ai-route-line">${escapeHtml(aiLabel)}</p>
         </div>
         <span class="wait-badge">${escapeHtml(waitLabel)}</span>
       </div>
@@ -425,6 +440,79 @@ function renderRoutes(routes) {
 
     elements.routesList.append(routeCard);
   });
+}
+
+function renderAiSummary(routes) {
+  const activeRoutes = routes.filter((route) => route.reportCount && route.aiWaitEstimate);
+  if (!activeRoutes.length) {
+    elements.aiEstimate.textContent = "No recent passenger reports yet. Demo data can show how the estimate works.";
+    return;
+  }
+
+  const topRoute = activeRoutes[0];
+  elements.aiEstimate.textContent = `For ${topRoute.destination}, AI estimates about ${topRoute.aiWaitEstimate} min based on ${topRoute.reportCount} passenger ${topRoute.reportCount === 1 ? "report" : "reports"} from the last 30 minutes.`;
+}
+
+function estimateWaitMinutes(waitTimes) {
+  const numericWaits = waitTimes
+    .map(waitTimeToMinutes)
+    .filter((minutes) => Number.isFinite(minutes));
+
+  if (!numericWaits.length) {
+    return null;
+  }
+
+  const total = numericWaits.reduce((sum, minutes, index) => {
+    const recencyWeight = Math.max(1, numericWaits.length - index);
+    return sum + minutes * recencyWeight;
+  }, 0);
+  const weightTotal = numericWaits.reduce((sum, _minutes, index) => sum + Math.max(1, numericWaits.length - index), 0);
+
+  return Math.round(total / weightTotal);
+}
+
+function waitTimeToMinutes(waitTime = "") {
+  if (waitTime.includes("0-5")) return 3;
+  if (waitTime.includes("5-10")) return 8;
+  if (waitTime.includes("10-15")) return 13;
+  if (waitTime.includes("15+")) return 18;
+  return NaN;
+}
+
+async function loadDemoReports() {
+  const demoRoutes = stand.routes.slice(0, 4);
+  const demoWaits = ["5-10 min", "5-10 min", "10-15 min", "0-5 min"];
+
+  if (!usingFirebase || !db) {
+    renderRoutes(seedBoardState());
+    showReportToast(3, demoRoutes[0]);
+    return;
+  }
+
+  elements.loadDemoData.disabled = true;
+  elements.loadDemoData.textContent = "Loading...";
+
+  try {
+    await Promise.all(demoRoutes.map((destination, index) => {
+      const request = {
+        standId: stand.id,
+        standName: stand.name,
+        routeId: routeIdFor(destination),
+        origin: stand.name,
+        destination,
+        waitTime: demoWaits[index] || "5-10 min",
+        timestamp: Date.now() - index * 45 * 1000
+      };
+      return firebaseApi.push(firebaseApi.ref(db, `stands/${stand.id}/requests`), request);
+    }));
+    showReportToast(demoRoutes.length, demoRoutes[0]);
+  } catch (error) {
+    console.error("Could not load demo data.", error);
+    alert("Could not load demo data. Please try again.");
+  } finally {
+    elements.loadDemoData.disabled = false;
+    elements.loadDemoData.textContent = "Load demo data";
+  }
 }
 
 function renderHeroStats(routes) {
