@@ -18,6 +18,10 @@ Printable QR board example:
 
 https://autoboard-8e77c.web.app/board.html?stand=silkboard
 
+## Demo Screenshot
+
+![AutoBoard passenger page with AI-assisted wait estimates](docs/autoboard-silkboard.png)
+
 ## Problem
 
 At shared auto stands, passengers usually do not know whether an auto is currently taking their route. Drivers may shout destinations, passengers may wait uncertainly, and newcomers to the city struggle even more.

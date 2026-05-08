@@ -14,7 +14,7 @@ These are the five board-ready pilot stands for the demo:
 4. Silk Board
 5. Hebbal
 
-The app also keeps extra nearby stands in the data, but the pitch should focus on these seven.
+The app also keeps extra nearby routes in the data, but the pitch should focus on these five board-ready stands.
 
 ## Live Passenger Links
 

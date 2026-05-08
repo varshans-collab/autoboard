@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6c800" />
     <title>AutoBoard Bengaluru</title>
     <link rel="preconnect" href="https://www.gstatic.com" />
-    <link rel="stylesheet" href="/passenger.css?v=ai-transparency" />
+    <link rel="stylesheet" href="/passenger.css?v=ai-visible" />
   </head>
   <body>
     <main class="app-shell">
@@ -60,12 +60,12 @@
             <button class="demo-data-button" id="loadDemoData" type="button">Load demo data</button>
           </div>
         </div>
-        <div class="routes-list" id="routesList" aria-live="polite"></div>
         <div class="ai-panel" id="aiPanel">
           <strong>AI-assisted wait estimate</strong>
           <p id="aiEstimate">Waiting for passenger reports from the last 30 minutes.</p>
           <small>This is a transparent rule-based estimate from passenger-reported data. It is not guaranteed.</small>
         </div>
+        <div class="routes-list" id="routesList" aria-live="polite"></div>
         <button class="view-all-button" id="viewAllRoutes" type="button">View all routes</button>
       </section>
 
@@ -125,11 +125,11 @@
         <strong>AutoBoard</strong>
         <span>Scan to see live autos · ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</span>
       </section>
-      <p class="closing-line">Built for Bengaluru commuters ❤ Powered by passengers, not drivers.</p>
+      <p class="closing-line">Built for Bengaluru commuters. Powered by passengers, not drivers.</p>
     </main>
 
     <div class="report-toast" id="reportToast" role="status" aria-live="polite">+1 new auto reported</div>
     <button class="sticky-report-button" id="stickyReportButton" type="button">+ I just boarded an auto</button>
-    <script type="module" src="/passenger.js?v=ai-transparency"></script>
+    <script type="module" src="/passenger.js?v=ai-visible"></script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 import { firebaseConfig } from "/firebase-config.js";
-import { boardStandIds, stands } from "/stands-data.js?v=ai-transparency";
+import { boardStandIds, stands } from "/stands-data.js?v=ai-visible";
 
 const RECENT_WINDOW_MS = 30 * 60 * 1000;
 const DEMO_IMPACT_FLOOR = {
@@ -414,14 +414,14 @@ function renderRoutes(routes) {
     const reportLabel = route.reportCount === 1 ? "1 report" : `${route.reportCount} reports`;
     const waitLabel = route.reportCount ? route.waitTime : "Quiet";
     const aiLabel = route.reportCount && route.aiWaitEstimate
-      ? `AI ~${route.aiWaitEstimate} min based on ${route.reportCount} recent ${route.reportCount === 1 ? "report" : "reports"}`
-      : "No AI estimate yet";
+      ? `~${route.aiWaitEstimate} min estimated wait · Based on ${route.reportCount} recent ${route.reportCount === 1 ? "report" : "reports"} · Not guaranteed`
+      : "AI estimate appears after recent reports";
     const activityLabel = route.pulseCount
-      ? "⚡ Just reported"
+      ? "Just reported"
       : route.reportCount >= 5
-        ? "🔥 Trending"
+        ? "Trending"
         : route.reportCount > 0
-          ? "● Active now"
+          ? "Active now"
           : "";
 
     routeCard.innerHTML = `
@@ -445,12 +445,12 @@ function renderRoutes(routes) {
 function renderAiSummary(routes) {
   const activeRoutes = routes.filter((route) => route.reportCount && route.aiWaitEstimate);
   if (!activeRoutes.length) {
-    elements.aiEstimate.textContent = "No recent passenger reports yet. Demo data can show how the estimate works.";
+    elements.aiEstimate.textContent = "AI estimate appears after recent reports. Tap Load demo data for a judge-ready example.";
     return;
   }
 
   const topRoute = activeRoutes[0];
-  elements.aiEstimate.textContent = `For ${topRoute.destination}, AI estimates about ${topRoute.aiWaitEstimate} min based on ${topRoute.reportCount} passenger ${topRoute.reportCount === 1 ? "report" : "reports"} from the last 30 minutes.`;
+  elements.aiEstimate.textContent = `~${topRoute.aiWaitEstimate} min estimated wait to ${topRoute.destination} · Based on ${topRoute.reportCount} recent ${topRoute.reportCount === 1 ? "report" : "reports"} · Not guaranteed.`;
 }
 
 function estimateWaitMinutes(waitTimes) {
