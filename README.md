@@ -1,16 +1,42 @@
 # AutoBoard
 
-AutoBoard is a crowdsourced real-time route board for shared autorickshaw stands in Bengaluru.
+**A QR-powered live route board for Bengaluru shared auto stands.**
 
-Passengers scan a QR board at an auto stand, see live routes reported in the last 30 minutes, and can report the auto they just boarded in two taps. There is no login and no driver app.
+AutoBoard helps passengers at busy shared autorickshaw stands know which routes are active right now. A passenger scans a QR board at the stand, sees the live route board, and can update the board after boarding in two taps. No login. No driver app. No change to existing auto-stand culture.
 
 ## Live Demo
 
+Main app:
+
 https://autoboard-8e77c.web.app
 
-Best demo stand:
+Best judge demo:
 
 https://autoboard-8e77c.web.app/stand/silkboard
+
+Printable QR board example:
+
+https://autoboard-8e77c.web.app/board.html?stand=silkboard
+
+## Problem
+
+At shared auto stands, passengers usually do not know whether an auto is currently taking their route. Drivers may shout destinations, passengers may wait uncertainly, and newcomers to the city struggle even more.
+
+The decision window is very short. A passenger standing at a junction needs to know:
+
+- Which routes are active now?
+- How recently was this route reported?
+- Roughly how long are people waiting?
+
+## Solution
+
+AutoBoard turns each auto stand into a live passenger-powered route board.
+
+1. A QR poster is placed at a stand.
+2. Passenger scans it.
+3. The correct stand page opens automatically.
+4. Passenger sees live routes from recent reports.
+5. If they just boarded, they update the board in two taps.
 
 ## Final Pilot Stands
 
@@ -22,19 +48,51 @@ https://autoboard-8e77c.web.app/stand/silkboard
 
 ## Passenger Links
 
-- https://autoboard-8e77c.web.app/stand/majestic
-- https://autoboard-8e77c.web.app/stand/shivajinagar
-- https://autoboard-8e77c.web.app/stand/krmarket
-- https://autoboard-8e77c.web.app/stand/silkboard
-- https://autoboard-8e77c.web.app/stand/hebbal
+- Majestic: https://autoboard-8e77c.web.app/stand/majestic
+- Shivajinagar: https://autoboard-8e77c.web.app/stand/shivajinagar
+- KR Market: https://autoboard-8e77c.web.app/stand/krmarket
+- Silk Board: https://autoboard-8e77c.web.app/stand/silkboard
+- Hebbal: https://autoboard-8e77c.web.app/stand/hebbal
 
 ## QR Board Links
 
-- https://autoboard-8e77c.web.app/board.html?stand=majestic
-- https://autoboard-8e77c.web.app/board.html?stand=shivajinagar
-- https://autoboard-8e77c.web.app/board.html?stand=krmarket
-- https://autoboard-8e77c.web.app/board.html?stand=silkboard
-- https://autoboard-8e77c.web.app/board.html?stand=hebbal
+These pages generate printable QR boards for each stand:
+
+- Majestic: https://autoboard-8e77c.web.app/board.html?stand=majestic
+- Shivajinagar: https://autoboard-8e77c.web.app/board.html?stand=shivajinagar
+- KR Market: https://autoboard-8e77c.web.app/board.html?stand=krmarket
+- Silk Board: https://autoboard-8e77c.web.app/board.html?stand=silkboard
+- Hebbal: https://autoboard-8e77c.web.app/board.html?stand=hebbal
+
+## Key Features
+
+- Stand-specific QR links using `/stand/{standId}`
+- Live route board from Firebase Realtime Database
+- Shows only recent route activity from the last 30 minutes
+- Two-tap passenger reporting flow
+- Destination search and voice input for route reporting
+- Seeded Bengaluru routes for pilot stands
+- Demo fallback state when there is no live data yet
+- Printable QR poster page for each stand
+- Firebase Hosting rewrite support for `/stand/**`
+
+## How The Demo Works
+
+1. Open a QR board page, for example:
+
+   https://autoboard-8e77c.web.app/board.html?stand=silkboard
+
+2. Scan the QR code or open the passenger page:
+
+   https://autoboard-8e77c.web.app/stand/silkboard
+
+3. View the live route board.
+
+4. Search or tap a destination.
+
+5. Tap a wait time.
+
+6. Watch the board update in real time.
 
 ## Tech Stack
 
@@ -44,9 +102,9 @@ https://autoboard-8e77c.web.app/stand/silkboard
 - Firebase Hosting
 - Firebase Realtime Database
 
-## Firebase Data Path
+## Firebase Data Model
 
-Passenger reports are written to:
+Passenger reports are stored at:
 
 ```text
 stands/{standId}/requests/{requestId}
@@ -64,10 +122,38 @@ waitTime
 timestamp
 ```
 
+## Project Structure
+
+```text
+index.html              Passenger web app
+passenger.css           Passenger UI
+passenger.js            Passenger logic and Firebase realtime updates
+board.html              Printable QR board page
+board.css               QR board UI
+board.js                QR generation and stand-specific board logic
+stands-data.js          Pilot stands and seeded routes
+firebase-config.js      Firebase web app config
+database.rules.json     Realtime Database validation rules
+firebase.json           Hosting config and /stand/** rewrites
+```
+
 ## Deploy
+
+Install Firebase tools:
 
 ```powershell
 npm install -g firebase-tools
+```
+
+Login and deploy:
+
+```powershell
 firebase login
 firebase deploy
 ```
+
+## Why This Fits The Problem
+
+AutoBoard does not ask drivers to install or use an app. It works with the existing shared-auto behavior: passengers who already boarded report what happened, and the next passengers benefit immediately.
+
+The board is the output. The passenger report is only the lightweight input.
